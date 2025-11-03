@@ -3,7 +3,7 @@
 // See the top-level COPYRIGHT file for details.
 // SPDX-License-Identifier: Apache-2.0 WITH LLVM-exception
 //---------------------------------------------------------------------------//
-//! \file qirxacc/QsimQuantum.cc
+//! \file qirqsim/QsimQuantum.cc
 //---------------------------------------------------------------------------//
 
 #include "QsimQuantum.hh"
