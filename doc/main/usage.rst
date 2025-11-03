@@ -12,6 +12,22 @@ Using QIR-EE
 
 QIR-EE includes a core set of libraries for internal/external use, applications, and front ends.
 
+Interface Application (qir-qsim)
+================================
+
+The ``qir-qsim`` application processes an LLVM QIR file and dispatches to Google QSim.
+
+Usage::
+
+   ./../build/bin/qir-qsim [OPTIONS] input
+
+   Positionals:
+     input TEXT REQUIRED              QIR input file
+
+   Options:
+     -h,--help                        Print this help message and exit
+     -i,--input TEXT REQUIRED         QIR input file
+     -s,--shots INT [1]               Number of shots
 
 Interface Application (qir-xacc)
 ================================
@@ -41,6 +57,10 @@ Export Path to Executable::
 
 This will allow you to access installed QIR-EE executables from anywhere in command line.
 
+Basic Usage with ``qir-qsim`` Executable::
+
+    qir-qsim llvm-file-path -s num-shots
+
 Basic Usage with ``qir-xacc`` Executable::
 
     qir-xacc llvm-file-path --flag-name flag-value
@@ -52,8 +72,24 @@ With XACC we have tested: ``aer``, ``qpp``, ``qsim``, ``quantinuum:H1-1SC``, ``q
 * Credentials are required for access to ``ionq`` and ``quantinuum`` and can be stored in ``.ionq_config`` and ``.quantinuum_config`` files in the home directory, respectively.
 
 
-Example
+Examples
 =======
+
+Here are some example commands and their expected outputs.
+
+.. code-block:: console
+
+    qir-qsim $HOME/qiree/examples/teleport.ll -s 100
+
+This command will execute the teleport algorithm described in teleport.ll with 100 shots.
+
+The resulting output looks like:
+
+.. code-block:: console
+
+    {"011":21,"101":22,"111":32,"001":25}
+
+Next, we show an example using the XACC interface.
 
 .. code-block:: console
 
@@ -80,9 +116,3 @@ The resulting output looks like:
     array <null> length 2
     qubit 0 experiment <null>: {0: 526, 1: 498}
     qubit 1 experiment <null>: {0: 526, 1: 498}
-
-
-Software library
-================
-
-TODO
