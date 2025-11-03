@@ -16,7 +16,7 @@ This implementation is associated to the paper "A Cross-Platform Execution Engin
 the Quantum Intermediate Representation" [#qiree_paper]_ and is maintained by the QIR-EE
 Developers.
 
-At version |release|, this work represents the feasibility of a modular workflow at 
+At version |release|, this work represents the feasibility of a modular workflow at
 the lower end of the quantum software stack. We welcome feedback and ideas for
 collaborations.
 

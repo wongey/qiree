@@ -20,7 +20,7 @@ Most of the QIR-EE documentation is readable through the codebase through a comb
 ### Dependencies
 
 There is a key dependency for QIR-EE to work properly. Please make sure to download and install the most current version of:
-1. [LLVM](https://releases.llvm.org/) (we have tested versions 14 through 18). 
+1. [LLVM](https://releases.llvm.org/) (we have tested versions 14 through 18).
 
 There is a optional dependency for QIR-EE to run on hardware backends.
 
