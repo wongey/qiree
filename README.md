@@ -41,7 +41,7 @@ There is a optional dependency for QIR-EE to run on hardware backends.
 
 
 QIR-EE Setup in Command Line
-<br>
+
 <div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #007833;">
 
 1. Clone/download/unzip this repo.
@@ -52,9 +52,7 @@ QIR-EE Setup in Command Line
 
 4. `cmake ..`
 
-5. `make`
-</div>
-</br>
+5. `make` </div>
 
 By default, we have the following options. These can be adjusted in step 3.
 
