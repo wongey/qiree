@@ -17,12 +17,12 @@ Dependencies
 
 QIR-EE is built using modern CMake_. It has multiple dependencies to operate
 as a full-featured code, but each dependency can be individually disabled as
-needed.
+needed. These dependencies are not all strictly required to build
+and run QIR-EE, but omitting them will disable certain features.
 
 .. _CMake: https://cmake.org
 
-The code requires external dependencies to build with full functionality.
-However, any combination of these requirements can be omitted to enable
+In other words, any combination of these requirements can be omitted to enable
 limited development on experimental HPC systems or personal machines with
 fewer available components.
 
@@ -58,10 +58,36 @@ Ideally you will build QIR-EE with all dependencies to gain the full
 functionality of the code, but there are circumstances in which you may not
 have (or want) all the dependencies or features available.
 
-Bulding QIR-EE (Basic Functionality with XACC)
+Building QIR-EE (minimal)
 ==============================================
 
-Once you have your build system and a minimal version XACC_ installed with
+Clone the latest development version of QIR-EE:
+
+.. code-block:: console
+
+   $ git clone https://github.com/qiree-project/qiree.git
+
+or download and extract it from the GitHub-generated `zip file`_. Then:
+
+.. code-block:: console
+
+   $ cd qiree
+   $ mkdir build && cd build
+   $ cmake ..
+   $ make
+
+QIR-EE runs from anywhere in terminal provided you add the install folder to your PATH:
+
+.. code-block:: console
+
+   $ export PATH=${YOUR-QIREE-INSTALL-DIR}/bin:$PATH
+
+
+Building QIR-EE (with XACC)
+==============================================
+
+XACC is a programming framework that allows the ability to run QIR files on hardware
+backends. Once you have your build system and a minimal version XACC_ installed with
 
 .. code-block:: console
 
