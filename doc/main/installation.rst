@@ -58,7 +58,7 @@ Ideally you will build QIR-EE with all dependencies to gain the full
 functionality of the code, but there are circumstances in which you may not
 have (or want) all the dependencies or features available.
 
-Bulding QIR-EE (minimal)
+Building QIR-EE (minimal)
 ==============================================
 
 Clone the latest development version of QIR-EE:
@@ -83,7 +83,7 @@ QIR-EE runs from anywhere in terminal provided you add the install folder to you
    $ export PATH=${YOUR-QIREE-INSTALL-DIR}/bin:$PATH
 
 
-Bulding QIR-EE (with XACC)
+Building QIR-EE (with XACC)
 ==============================================
 
 XACC is a programming framework that allows the ability to run QIR files on hardware

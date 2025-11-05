@@ -16,10 +16,10 @@ This research was supported by the US Department of Energy, Office of Science Ad
 Scientific Computing Research, Advanced Research for Quantum Computing. This research
 used resources of the Oak Ridge Leadership Computing Facility, which is a DOE Office
 of Science User Facility supported under Contract DE-AC05-00OR22725. The work was
-initally performed at Oak Ridge National Laboratory as part of the Advanced Integrated
+initially performed at Oak Ridge National Laboratory as part of the Advanced Integrated
 Development Environments for Quantum Computing (AIDE-QC) project and continued under
 the Modular and Error-Aware Software Stack for Heterogeneous Quantum Computing
-Ecosysstems (MACH-Q) project.
+Ecosystems (MACH-Q) project.
 
 
 .. raw:: latex

@@ -6,7 +6,7 @@ The QIR Execution Engine library provides interfaces for processing [Quantum Int
 
 The Quantum Intermediate Representation Execution Engine (QIR-EE, pronounced 'cure-ee') is a tool designed to streamline the process of running quantum circuits and algorithms. One of our goals is to make your journey into quantum computing as seamless as possible. This implementation is associated to the paper [A Cross-Platform Execution Engine for the Quantum Intermediate Representation](https://doi.org/10.48550/arXiv.2404.14299) and is maintained by the QIR-EE Developers. This paper will appear in Springer Nature's Journal of Supercomputing's Special Issue for Quantum Computing Algorithms, Systems, and Applications.
 
-This works represents the feasibility of a modular workflow at the lower end of the quantum software stack. We welcome feedback and ideas for collaborations.
+This work represents the feasibility of a modular workflow at the lower end of the quantum software stack. We welcome feedback and ideas for collaborations.
 
 ## Documentation
 
@@ -22,27 +22,25 @@ Most of the QIR-EE documentation is readable through the codebase through a comb
 There is a key dependency for QIR-EE to work properly. Please make sure to download and install the most current version of:
 1. [LLVM](https://releases.llvm.org/) (we have tested versions 14 through 18).
 
-There is a optional dependency for QIR-EE to run on hardware backends.
+There is an optional dependency for QIR-EE to run on hardware backends.
 
 2. [XACC](https://github.com/ORNL-QCI/xacc): Here, we recommend setting option `-DQIREE_MINIMAL_BUILD=ON` during cmake for a faster build. Follow the [XACC prerequisites](https://xacc.readthedocs.io/en/latest/install.html) page to ensure a smoother installation.
 
 ### Requirements for Basic Runs
 
-- Ability download and build this project with cmake.
+- Ability to download and build this project with cmake.
 - A QIR file with the quantum program that you want to run (see examples folder).
 
 ### (Optional) Credentials for Hardware and Specialized Simulator Runs
 
 - Access to a compatible quantum computing simulator or real quantum hardware.
-- Configuration files set up in your home folder that contain credential to
+- Configuration files set up in your home folder that contain credentials to
   access vendor backends. This typically takes on the form `.backend_config` depending on the backends you have access to.
 
 ### Installation
 
 
 QIR-EE Setup in Command Line
-
-<div style="border: 1px solid #ccc; padding: 10px; border-radius: 5px; background-color: #007833;">
 
 1. Clone/download/unzip this repo.
 
@@ -52,7 +50,7 @@ QIR-EE Setup in Command Line
 
 4. `cmake ..`
 
-5. `make` </div>
+5. `make`
 
 By default, we have the following options. These can be adjusted in step 3.
 
