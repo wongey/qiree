@@ -4,7 +4,7 @@ The QIR Execution Engine library provides interfaces for processing [Quantum Int
 
 ## Introduction
 
-The Quantum Intermediate Representation Execution Engine (QIR-EE, pronounced 'cure-ee') is a tool designed to streamline the process of running quantum circuits and algorithms. One of our goals is to make your journey into quantum computing as seamless as possible. This implementation is associated to the paper [A Cross-Platform Execution Engine for the Quantum Intermediate Representation](https://doi.org/10.48550/arXiv.2404.14299) and is maintained by the QIR-EE Developers. This paper will appear in Springer Nature's Journal of Supercomputing's Special Issue for Quantum Computing Algorithms, Systems, and Applications.
+The Quantum Intermediate Representation Execution Engine (QIR-EE, pronounced 'cure-ee') is a tool designed to streamline the process of running quantum circuits and algorithms. One of our goals is to make your journey into quantum computing as seamless as possible. This implementation is associated to the paper [A Cross-Platform Execution Engine for the Quantum Intermediate Representation](https://doi.org/10.1007/s11227-025-07969-2) published in the Journal of Supercomputing, Volume 81, 1521 (2025) and is maintained by the QIR-EE Developers.
 
 This work represents the feasibility of a modular workflow at the lower end of the quantum software stack. We welcome feedback and ideas for collaborations.
 
