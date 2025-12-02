@@ -1,4 +1,3 @@
-# Build directly on the GitHub runner with caching
 name: build-fast
 on:
   workflow_dispatch:
@@ -10,10 +9,10 @@ concurrency:
 
 jobs:
   linux:
-    name: ${{matrix.runner}}-${{matrix.compiler}}-${{matrix.version}}-llvm${{matrix.llvm}}
+    name: ${{matrix.build-config.runner}}-${{matrix.build-config.compiler}}-${{matrix.build-config.version}}-llvm${{matrix.build-config.llvm}}${{ matrix.use-lightning == true && '-lightning' || '' }}
     strategy:
       matrix:
-        include:
+        build-config:
           - runner: jammy
             compiler: gcc
             version: 12
@@ -22,43 +21,65 @@ jobs:
             compiler: clang
             version: 15
             llvm: 15
+        use-lightning: [false, true]
     runs-on: >-
-      ${{  matrix.runner == 'focal' && 'ubuntu-20.04'
-        || matrix.runner == 'jammy' && 'ubuntu-22.04'
+      ${{  matrix.build-config.runner == 'focal' && 'ubuntu-20.04'
+        || matrix.build-config.runner == 'jammy' && 'ubuntu-22.04'
         || null
       }}
     env:
       CCACHE_DIR: "${{github.workspace}}/.ccache"
       CCACHE_MAXSIZE: "10G"
-      CC: ${{matrix.compiler}}-${{matrix.version}}
-      CXX: ${{matrix.compiler == 'gcc' && 'g++' || 'clang++'}}-${{matrix.version}}
+      CC: ${{matrix.build-config.compiler}}-${{matrix.build-config.version}}
+      CXX: ${{matrix.build-config.compiler == 'gcc' && 'g++' || 'clang++'}}-${{matrix.build-config.version}}
     steps:
+      - name: Install Python (if building for Lightning)
+        if: matrix.use-lightning == true
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
       - name: Install dependencies
         run: |
           sudo apt-get -q -y update
           sudo apt-get -q -y install \
             ccache cmake ninja-build libgtest-dev \
-            llvm-${{matrix.llvm}}-dev \
-            ${{matrix.compiler}}-${{matrix.version}} \
-            ${{matrix.compiler == 'gcc' && format('g++-{0}', matrix.version) || ''}}
+            llvm-${{matrix.build-config.llvm}}-dev \
+            ${{matrix.build-config.compiler}}-${{matrix.build-config.version}} \
+            ${{matrix.build-config.compiler == 'gcc' && format('g++-{0}', matrix.build-config.version) || ''}}
+
+          if [[ "${{ matrix.use-lightning }}" == "true" ]]; then
+            echo "Installing Lightning Python dependencies..."
+            python -m pip install pennylane-lightning==0.43.0
+          fi
+
           echo "Installed toolchain:"
           ld --version | head -1
           $CC --version | head -1
           $CXX --version | head -1
-          llvm-config-${{matrix.llvm}} --version | head -1
+          llvm-config-${{matrix.build-config.llvm}} --version | head -1
+
       - name: Check out
         uses: actions/checkout@v4
+
       - name: Set up ccache
         uses: actions/cache@v4
         with:
           path: ${{env.CCACHE_DIR}}
-          key: ccache-${{matrix.runner}}-${{matrix.compiler}}-${{matrix.version}}-${{github.run_id}}
-          restore-keys: ccache-${{matrix.runner}}-${{matrix.compiler}}-${{matrix.version}}
+          key: ccache-${{matrix.build-config.runner}}-${{matrix.build-config.compiler}}-${{matrix.build-config.version}}-${{github.run_id}}
+          restore-keys: ccache-${{matrix.build-config.runner}}-${{matrix.build-config.compiler}}-${{matrix.build-config.version}}
+
       - name: Zero ccache stats
         run: |
           ccache -z
+
       - name: Configure
         run: |
+          if [[ "${{ matrix.use-lightning }}" == "true" ]]; then
+            export LIGHTNING_PATH=$(bash ./scripts/lightning-path.sh qubit)
+          else
+            export LIGHTNING_PATH=""
+          fi
           mkdir build && cd build
           cmake -GNinja \
             -DQIREE_GIT_DESCRIBE="${{github.event.pull_request
@@ -67,23 +88,29 @@ jobs:
             -DQIREE_BUILD_TESTS:BOOL=ON \
             -DQIREE_DEBUG:BOOL=ON \
             -DQIREE_USE_XACC:BOOL=OFF \
+            -DQIREE_USE_LIGHTNING:BOOL=${{ matrix.use-lightning == true && 'ON' || 'OFF' }} \
+            -DQIREE_LIGHTNING_SIM_PATH="$LIGHTNING_PATH" \
             -DCMAKE_BUILD_TYPE="Release" \
             -DCMAKE_INSTALL_PREFIX="${{github.workspace}}/install" \
             -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
             -DCMAKE_CXX_FLAGS="-Wall -Wextra -pedantic" \
             ..
+
       - name: Build all
         working-directory: build
         run: |
           ninja
+
       - name: Run tests
         working-directory: build
         run: |
           ctest --parallel 2 --timeout 15 --output-on-failure
+
       - name: Install
         working-directory: build
         run: |
           ninja install
+
       - name: Show ccache stats
         run: |
           ccache -s

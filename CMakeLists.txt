@@ -38,6 +38,7 @@ option(QIREE_BUILD_TESTS "Build QIR-EE unit tests" ON)
 option(QIREE_BUILD_EXAMPLES "Build QIR-EE examples" OFF)
 option(QIREE_USE_QSIM "Download and build Google qsim backend" ON)
 option(QIREE_USE_XACC "Build XACC interface" OFF)
+option(QIREE_USE_LIGHTNING "Build Pennylane Lightning backend" OFF)
 
 qiree_set_default(BUILD_TESTING ${QIREE_BUILD_TESTS})
 
@@ -136,6 +137,27 @@ if(QIREE_USE_QSIM)
     "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/external>"
   )
 endif()
+
+if(QIREE_USE_LIGHTNING)
+  qiree_add_library(qiree_lightning INTERFACE)
+  add_library(QIREE::lightning ALIAS qiree_lightning)
+  # Fetch Catalyst runtime include files
+  include("${CMAKE_CURRENT_LIST_DIR}/cmake/support_catalyst.cmake")
+  FindCatalyst(qiree_lightning)
+  target_include_directories(qiree_lightning SYSTEM INTERFACE
+    "$<BUILD_INTERFACE:${CMAKE_CURRENT_BINARY_DIR}/external>"
+    "$<INSTALL_INTERFACE:${CMAKE_INSTALL_INCLUDEDIR}/external>"
+  )
+  set(QIREE_LIGHTNING_SIM_PATH "" CACHE FILEPATH "Path to the Lightning simulator shared library")
+  if(NOT QIREE_LIGHTNING_SIM_PATH)
+    message(FATAL_ERROR "QIREE_LIGHTNING_SIM_PATH is not set. Please specify the path using: -DQIREE_LIGHTNING_SIM_PATH=/path/to/lib")
+  endif()
+  message(STATUS "Using Lightning simulator shared library: ${QIREE_LIGHTNING_SIM_PATH}")
+  target_compile_definitions(qiree_lightning INTERFACE
+    QIREE_LIGHTNING_RTDLIB="${QIREE_LIGHTNING_SIM_PATH}"
+  )
+endif()
+
 
 if(QIREE_USE_XACC)
   find_package(XACC REQUIRED)
