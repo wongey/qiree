@@ -66,7 +66,7 @@ TEST_F(XaccQuantumTest, sim_rotation)
 
     // Create a simulator that will write to the string stream
     XaccQuantum xacc_sim{os};
-    XaccDefaultRuntime xacc_rt{os, xacc_sim};
+    XaccDefaultRuntime xacc_rt{os, xacc_sim, true};  // true = print accelbuf
 
     // Call functions in the same sequence that rotation.ll would
     xacc_sim.set_up([] {
