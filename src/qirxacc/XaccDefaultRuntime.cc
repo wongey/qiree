@@ -31,8 +31,11 @@ void XaccDefaultRuntime::initialize(OptionalCString env)
 void XaccDefaultRuntime::array_record_output(size_type s, OptionalCString tag)
 {
     this->execute_if_needed();
-    output_ << "array " << (tag ? tag : "<null>") << " length " << s
-            << std::endl;
+    if (!measurements_only_)
+    {
+        output_ << "array " << (tag ? tag : "<null>") << " length " << s
+                << std::endl;
+    }
 }
 
 //---------------------------------------------------------------------------//
@@ -43,8 +46,11 @@ void XaccDefaultRuntime::array_record_output(size_type s, OptionalCString tag)
 void XaccDefaultRuntime::tuple_record_output(size_type s, OptionalCString tag)
 {
     this->execute_if_needed();
-    output_ << "tuple " << (tag ? tag : "<null>") << " length " << s
-            << std::endl;
+    if (!measurements_only_)
+    {
+        output_ << "tuple " << (tag ? tag : "<null>") << " length " << s
+                << std::endl;
+    }
 }
 
 //---------------------------------------------------------------------------//
@@ -54,15 +60,18 @@ void XaccDefaultRuntime::tuple_record_output(size_type s, OptionalCString tag)
 void XaccDefaultRuntime::result_record_output(Result r, OptionalCString tag)
 {
     this->execute_if_needed();
-    Qubit q = xacc_.result_to_qubit(r);
+    if (!measurements_only_)
+    {
+        Qubit q = xacc_.result_to_qubit(r);
 
-    // Get a map of string ("0" and "1" ???) -> int
-    auto counts = xacc_.get_marginal_counts({q});
+        // Get a map of string ("0" and "1" ???) -> int
+        auto counts = xacc_.get_marginal_counts({q});
 
-    // Print the result
-    output_ << "qubit " << q.value << " experiment " << (tag ? tag : "<null>")
-            << ": {0: " << counts["0"] << ", 1: " << counts["1"] << '}'
-            << std::endl;
+        // Print the result
+        output_ << "qubit " << q.value << " experiment "
+                << (tag ? tag : "<null>") << ": {0: " << counts["0"]
+                << ", 1: " << counts["1"] << '}' << std::endl;
+    }
 }
 
 //---------------------------------------------------------------------------//
@@ -71,9 +80,16 @@ void XaccDefaultRuntime::result_record_output(Result r, OptionalCString tag)
 
 void XaccDefaultRuntime::execute_if_needed()
 {
-    if (xacc_.execute_if_needed() && print_accelbuf_)
+    if (xacc_.execute_if_needed())
     {
-        xacc_.print_accelbuf();
+        if (measurements_only_)
+        {
+            xacc_.print_measurements_only();
+        }
+        else if (print_accelbuf_)
+        {
+            xacc_.print_accelbuf();
+        }
     }
 }
 }  // namespace qiree

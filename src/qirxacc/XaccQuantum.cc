@@ -308,6 +308,41 @@ void XaccQuantum::print_accelbuf()
 }
 
 //---------------------------------------------------------------------------//
+/*!
+ * Print only the measurements as a simple dictionary.
+ */
+void XaccQuantum::print_measurements_only()
+{
+    // Get all qubits
+    std::vector<Qubit> all_qubits;
+    for (size_type i = 0; i < num_qubits_; ++i)
+    {
+        all_qubits.push_back(Qubit{i});
+    }
+
+    // Get measurement counts
+    auto counts = this->get_marginal_counts(all_qubits);
+
+    // Print as simple JSON dictionary
+    output_ << "{";
+    bool first = true;
+    for (auto const& [bitstring, count] : counts)
+    {
+        if (!first)
+            output_ << ",";
+        // Strip null bytes from bitstring (XACC returns fixed-size char
+        // arrays)
+        std::string clean_bitstring = bitstring;
+        clean_bitstring.erase(
+            std::find(clean_bitstring.begin(), clean_bitstring.end(), '\0'),
+            clean_bitstring.end());
+        output_ << "\"" << clean_bitstring << "\":" << count;
+        first = false;
+    }
+    output_ << "}" << std::endl;
+}
+
+//---------------------------------------------------------------------------//
 // PRIVATE FUNCTIONS
 //---------------------------------------------------------------------------//
 /*!

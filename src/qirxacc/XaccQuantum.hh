@@ -112,6 +112,9 @@ class XaccQuantum final : virtual public QuantumNotImpl
 
     // Print the \c xacc::AcceleratorBuffer
     void print_accelbuf();
+
+    // Print only the measurements as a simple dictionary
+    void print_measurements_only();
     //!@}
 
   private:

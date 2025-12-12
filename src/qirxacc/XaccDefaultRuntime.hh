@@ -33,7 +33,8 @@ class XaccDefaultRuntime final : virtual public RuntimeInterface
     // Construct with XACC quantum runtime and options
     inline XaccDefaultRuntime(std::ostream& output,
                               XaccQuantum& xacc,
-                              bool print_accelbuf);
+                              bool print_accelbuf,
+                              bool measurements_only = false);
 
     //!@{
     //! \name Runtime interface
@@ -53,7 +54,8 @@ class XaccDefaultRuntime final : virtual public RuntimeInterface
   private:
     std::ostream& output_;
     XaccQuantum& xacc_;
-    bool const print_accelbuf_;
+    bool print_accelbuf_;
+    bool measurements_only_;
 
     void execute_if_needed();
 };
@@ -67,8 +69,12 @@ class XaccDefaultRuntime final : virtual public RuntimeInterface
  */
 XaccDefaultRuntime::XaccDefaultRuntime(std::ostream& output,
                                        XaccQuantum& xacc,
-                                       bool print_accelbuf = true)
-    : output_(output), xacc_(xacc), print_accelbuf_(print_accelbuf)
+                                       bool print_accelbuf,
+                                       bool measurements_only)
+    : output_(output)
+    , xacc_(xacc)
+    , print_accelbuf_(print_accelbuf)
+    , measurements_only_(measurements_only)
 {
 }
 
