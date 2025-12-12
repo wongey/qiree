@@ -31,7 +31,8 @@ void run(std::string const& filename,
          std::string const& accel_name,
          int num_shots,
          bool print_accelbuf,
-         bool group_tuples)
+         bool group_tuples,
+         bool measurements_only)
 {
     // Load the input
     Executor execute{Module{filename}};
@@ -47,7 +48,7 @@ void run(std::string const& filename,
     else
     {
         rt = std::make_unique<XaccDefaultRuntime>(
-            std::cout, xacc, print_accelbuf);
+            std::cout, xacc, print_accelbuf, measurements_only);
     }
 
     // Run
@@ -69,6 +70,7 @@ int main(int argc, char* argv[])
     std::string filename;
     bool no_print_accelbuf{false};
     bool group_tuples{false};
+    bool measurements_only{false};
 
     CLI::App app;
     auto* filename_opt
@@ -87,11 +89,18 @@ int main(int argc, char* argv[])
                  group_tuples,
                  "Print per-tuple/per-array measurement statistics rather "
                  "than per-qubit");
+    app.add_flag("--measurements-only",
+                 measurements_only,
+                 "Print only the measurements as a simple dictionary");
 
     CLI11_PARSE(app, argc, argv);
 
-    qiree::app::run(
-        filename, accel_name, num_shots, !no_print_accelbuf, group_tuples);
+    qiree::app::run(filename,
+                    accel_name,
+                    num_shots,
+                    !no_print_accelbuf,
+                    group_tuples,
+                    measurements_only);
 
     return EXIT_SUCCESS;
 }
