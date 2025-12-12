@@ -68,6 +68,9 @@ class Module
     // Translate module attributes into flags
     ModuleFlags load_module_flags() const;
 
+    // Write the module to a file (LLVM IR text format)
+    void write_to_file(std::string const& filename) const;
+
     //! True if the module has been constructed (and not moved)
     explicit operator bool() const { return static_cast<bool>(module_); }
 

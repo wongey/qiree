@@ -17,6 +17,7 @@
 #include <llvm/IRReader/IRReader.h>
 #include <llvm/Support/MemoryBuffer.h>
 #include <llvm/Support/SourceMgr.h>
+#include <llvm/Support/raw_ostream.h>
 
 #include "Assert.hh"
 
@@ -264,6 +265,24 @@ ModuleFlags Module::load_module_flags() const
     QIREE_EXTRACT(dynamic_result_management);
 
     return flags;
+}
+
+//---------------------------------------------------------------------------//
+/*!
+ * Write the module to a file in LLVM IR text format.
+ */
+void Module::write_to_file(std::string const& filename) const
+{
+    QIREE_EXPECT(*this);
+
+    std::error_code ec;
+    llvm::raw_fd_ostream out(filename, ec);
+
+    QIREE_VALIDATE(!ec,
+                   << "failed to open file '" << filename
+                   << "' for writing: " << ec.message());
+
+    out << *module_;
 }
 
 //---------------------------------------------------------------------------//
