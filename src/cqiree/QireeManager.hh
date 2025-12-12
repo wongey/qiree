@@ -13,6 +13,7 @@
 #include <memory>
 #include <string>
 #include <string_view>
+#include <unordered_map>
 
 namespace qiree
 {
@@ -71,6 +72,11 @@ class QireeManager
     std::shared_ptr<QuantumInterface> quantum_;
     std::shared_ptr<SingleResultRuntime> runtime_;
     std::unique_ptr<ResultDistribution> result_;
+
+    // XACC-specific storage
+    std::unordered_map<std::string, int> xacc_measurements_;
+    int xacc_shots_{0};
+    bool using_xacc_{false};
 };
 
 }  // namespace qiree
